@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">MVVM项目</string>
+    <string name="show_error_content">An unexpected error occurred. \n sorry for the inconvenience.</string>
+    <string name="restart_app">Restart</string>
+    <string name="close_app">Close App</string>
+    <string name="error_content">Error Log</string>
+    <string name="error_detail">Error Details</string>
+    <string name="close">Close</string>
+    <string name="copy_content">Copy The Log</string>
+    <string name="error_details">Error Message</string>
+    <string name="home">Home</string>
+    <string name="mine">Mine</string>
+
+    <string name="layout_id_error">\n\tLayout id error\n\tPlease set activity @ContentView \n\t The sample: @ContentView(R.layout.main_activity)</string>
+    <string name="content_view_empty">\n\tPlease set activity @ContentView \n\t The sample: @ContentView(R.layout.main_activity)</string>
+
+    <!--指纹解锁文字-->
+    <string name="biometric_dialog_cancel">Cancel</string>
+    <string name="biometric_dialog_title">Verification</string>
+    <string name="biometric_dialog_subtitle">Verify fingerprint to continue</string>
+    <string name="biometric_dialog_state_normal">Fingerprint sensor</string>
+    <string name="biometric_dialog_state_failed">Failed to identify, please try again</string>
+    <string name="biometric_dialog_state_error">Verification error, please enter payment password</string>
+    <string name="biometric_dialog_state_error_enable_process">Verification error, setup failed</string>
+    <string name="biometric_dialog_state_succeeded">Verification successful</string>
+    <string name="biometric_dialog_use_password">Use Password</string>
+    <!--指纹解锁文字-->
+</resources>
