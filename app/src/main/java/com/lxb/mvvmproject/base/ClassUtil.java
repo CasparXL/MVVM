@@ -19,7 +19,7 @@ public class ClassUtil {
     public static <T> Class<T> getViewModel(Object obj) {
         Class<?> currentClass = obj.getClass();
         Class<T> tClass = getGenericClass(currentClass, AndroidViewModel.class);
-        if (tClass == null || tClass == AndroidViewModel.class || tClass == NoViewModel.class) {
+        if (tClass == null || tClass == AndroidViewModel.class || tClass == NoViewModel.class|| tClass == BaseViewModel.class) {
             return null;
         }
         return tClass;

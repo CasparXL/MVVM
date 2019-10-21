@@ -8,11 +8,10 @@ import android.support.annotation.NonNull;
 /**
  * 没有viewModel的情况
  */
-public class NoViewModel extends AndroidViewModel {
+public class NoViewModel extends BaseViewModel {
 
     public NoViewModel(@NonNull Application application) {
         super(application);
     }
-
 
 }

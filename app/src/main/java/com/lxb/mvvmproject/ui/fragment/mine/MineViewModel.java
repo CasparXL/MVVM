@@ -4,7 +4,9 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
 
-public class MineViewModel extends AndroidViewModel {
+import com.lxb.mvvmproject.base.BaseViewModel;
+
+public class MineViewModel extends BaseViewModel {
     public MineViewModel(@NonNull Application application) {
         super(application);
     }

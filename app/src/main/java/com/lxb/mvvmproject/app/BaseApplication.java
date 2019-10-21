@@ -3,6 +3,7 @@ package com.lxb.mvvmproject.app;
 import android.app.Application;
 import android.support.multidex.MultiDexApplication;
 
+import com.clj.fastble.BleManager;
 import com.hjq.toast.ToastUtils;
 import com.lxb.mvvmproject.BuildConfig;
 import com.lxb.mvvmproject.R;
@@ -29,6 +30,11 @@ public class BaseApplication extends MultiDexApplication {
         if (!LeakCanary.isInAnalyzerProcess(this)) {
             LeakCanary.install(this);
         }
+        BleManager.getInstance().init(context);
+        BleManager.getInstance()
+                .enableLog(true)
+                .setReConnectCount(1, 5000)
+                .setOperateTimeout(5000);
         SP.init(this);
         ToastUtils.init(this);
         LogUtil.init(BuildConfig.LOG_ENABLE, "浪");

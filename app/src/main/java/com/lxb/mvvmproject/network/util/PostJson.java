@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import okhttp3.RequestBody;
 
 /**
- * Post请求J
+ * Post请求Json数据转换
  */
 public class PostJson {
     public static RequestBody toRequestBody(String json) {

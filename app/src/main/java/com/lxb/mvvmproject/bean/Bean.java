@@ -1,5 +1,7 @@
 package com.lxb.mvvmproject.bean;
 
+import android.databinding.ObservableField;
+
 import java.io.Serializable;
 
 /**
@@ -7,7 +9,6 @@ import java.io.Serializable;
  * 界面名称以及功能:
  */
 public class Bean implements Serializable {
-
 
     private String data;
     private int code;

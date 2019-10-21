@@ -5,13 +5,11 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.util.Log;
 
 import java.util.Set;
 
 public class SP {
 
-    private static final String TAG = "PreferencesUtil";
     private static String defaultName = SP.class.getSimpleName();
     private static Context context;
 
@@ -88,7 +86,7 @@ public class SP {
 
 
     public static String get(String name, String key, String defValue) {
-        Log.e(TAG, "get: " + key + ":" + getPreferences(name).getString(key, defValue));
+        LogUtil.e("查询数据,key:"+key+",值:"+getPreferences(name).getString(key, defValue));
         return getPreferences(name).getString(key, defValue);
     }
 

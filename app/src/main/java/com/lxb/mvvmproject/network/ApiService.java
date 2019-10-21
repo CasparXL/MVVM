@@ -2,6 +2,8 @@ package com.lxb.mvvmproject.network;
 
 
 
+import android.arch.lifecycle.LiveData;
+
 import com.lxb.mvvmproject.bean.Bean;
 
 import io.reactivex.Observable;
@@ -24,6 +26,5 @@ public interface ApiService {
     //用户协议
     @GET("user/getUserAgreement")
     Observable<Bean> getUserAgreement();
-
 
 }

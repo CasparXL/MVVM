@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.activity.camera.CameraActivity">
+
+        <Button
+            android:id="@+id/btn_take"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="拍照"
+            android:layout_marginBottom="@dimen/dp_20"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_chage"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_chage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="切换横屏"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_take"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_take"
+            app:layout_constraintTop_toTopOf="@+id/btn_take" />
+
+        <com.lxb.mvvmproject.view.camera.AutoFitTextureView
+            android:id="@+id/auto_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/include" />
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/view_header" />
+    </android.support.constraint.ConstraintLayout>
+</layout>

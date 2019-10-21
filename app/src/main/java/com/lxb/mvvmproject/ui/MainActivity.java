@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 
+import com.clj.fastble.BleManager;
 import com.lxb.mvvmproject.R;
 import com.lxb.mvvmproject.base.BaseActivity;
 import com.lxb.mvvmproject.base.NoViewModel;
@@ -38,6 +39,11 @@ public class MainActivity extends BaseActivity<NoViewModel, ActivityMainBinding>
         bindingView.tvHome.setOnClickListener(perfectClickListener);
         bindingView.tvMine.setOnClickListener(perfectClickListener);
 
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        BleManager.getInstance().destroy();
     }
     //设置点击事件
     PerfectClickListener perfectClickListener = new PerfectClickListener() {

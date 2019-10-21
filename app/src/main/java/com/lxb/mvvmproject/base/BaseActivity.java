@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.gyf.immersionbar.ImmersionBar;
+import com.gyf.immersionbar.NotchUtils;
 import com.hjq.toast.ToastUtils;
 import com.lxb.mvvmproject.util.ActivityUtils;
 import com.lxb.mvvmproject.util.annotations.InjectManager;
@@ -29,7 +30,6 @@ public abstract class BaseActivity<VM extends AndroidViewModel, SV extends ViewD
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bindingView = DataBindingUtil.setContentView(this, InjectManager.inject(this));
-
         //沉浸式
         if (ImmersionBar.hasNotchScreen(this)) {//如果有刘海屏则让布局不与状态栏重合，如果没有刘海屏则全屏布局
             ImmersionBar.with(this).statusBarDarkFont(true).fitsSystemWindows(true).statusBarDarkFont(true).keyboardEnable(true).init();

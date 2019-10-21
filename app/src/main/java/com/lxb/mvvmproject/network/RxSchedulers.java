@@ -13,7 +13,6 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class RxSchedulers {
 
-
     private static final ObservableTransformer schedulersTransformer = new ObservableTransformer() {
         @Override
         public ObservableSource apply(Observable upstream) {

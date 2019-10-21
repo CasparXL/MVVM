@@ -2,7 +2,9 @@ package com.lxb.mvvmproject.ui.fragment.home;
 
 import android.arch.lifecycle.Observer;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -10,11 +12,15 @@ import com.lxb.mvvmproject.R;
 import com.lxb.mvvmproject.base.BaseFragment;
 import com.lxb.mvvmproject.bean.Bean;
 import com.lxb.mvvmproject.databinding.FragmentHomeBinding;
+import com.lxb.mvvmproject.ui.activity.bluetooth.BlueToothActivity;
+import com.lxb.mvvmproject.ui.activity.camera.CameraActivity;
 import com.lxb.mvvmproject.ui.activity.crash.CrashActivity;
+import com.lxb.mvvmproject.ui.activity.custom.CustomActivity;
 import com.lxb.mvvmproject.ui.activity.fingerprint.FingerPrintActivity;
 import com.lxb.mvvmproject.ui.activity.photograph.PhotographActivity;
 import com.lxb.mvvmproject.ui.activity.skeleton.SkeletonActivity;
 import com.lxb.mvvmproject.ui.adapter.HomeAdapter;
+import com.lxb.mvvmproject.util.LogUtil;
 import com.lxb.mvvmproject.util.annotations.ContentView;
 
 import java.util.ArrayList;
@@ -52,30 +58,13 @@ public class HomeFragment extends BaseFragment<HomeViewModel, FragmentHomeBindin
         viewModel.initAdapter();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     //功能点击事件
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        if (position == 0) {//捕获异常
-            CrashActivity.start(getContext());
-        } else if (position == 1) {//骨架屏幕
-            SkeletonActivity.start(getContext());
-        } else if (position == 2) {//骨架屏幕
-            FingerPrintActivity.start(getContext());
-        } else if (position == 3) {//骨架屏幕
-            PhotographActivity.start(getContext());
-        }
+        viewModel.start(position, getActivity());
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (getActivity() != null && getActivity().isFinishing()) {
-            viewModel.clear();
-        }
-    }
+
+
 }

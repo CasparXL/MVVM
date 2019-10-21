@@ -59,7 +59,7 @@ public class InjectManager {
                 throw new RuntimeException(getClassName(clazz) + activity.getString(R.string.layout_id_error));
             } else {
                 // 第一种方法
-                activity.setContentView(layoutId);
+//                activity.setContentView(layoutId);
 //                try {
 //                    Method method = clazz.getMethod("setContentView", int.class);
 //                    method.invoke(activity, layoutId);

@@ -13,14 +13,8 @@ import com.lxb.mvvmproject.base.BaseActivity;
 import com.lxb.mvvmproject.base.NoViewModel;
 import com.lxb.mvvmproject.config.Config;
 import com.lxb.mvvmproject.databinding.ActivityFingerPrintBinding;
-import com.lxb.mvvmproject.network.Api;
-import com.lxb.mvvmproject.network.BaseObserver;
 import com.lxb.mvvmproject.util.annotations.ContentView;
 import com.lxb.mvvmproject.util.fingerprint.BiometricPromptManager;
-import com.lxb.mvvmproject.util.rxjava.HttpManager;
-
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 
 /**
  * 指纹解锁

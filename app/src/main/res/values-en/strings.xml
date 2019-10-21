@@ -25,4 +25,10 @@
     <string name="biometric_dialog_state_succeeded">Verification successful</string>
     <string name="biometric_dialog_use_password">Use Password</string>
     <!--指纹解锁文字-->
+    <!--蓝牙-->
+    <string name="connect">Connect</string>
+    <string name="connected">Connected</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="enter">Enter</string>
+    <!--蓝牙-->
 </resources>
