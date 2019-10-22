@@ -5,6 +5,7 @@ package com.lxb.mvvmproject.network;
 import android.arch.lifecycle.LiveData;
 
 import com.lxb.mvvmproject.bean.Bean;
+import com.lxb.mvvmproject.bean.UserBean;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
@@ -25,6 +26,9 @@ public interface ApiService {
     Observable<String> getStartData(@Body String s);
     //用户协议
     @GET("user/getUserAgreement")
-    Observable<Bean> getUserAgreement();
+    Observable<Resource<String>> getUserAgreement();
+    //用户协议
+    @POST("user/loginUser")
+    Observable<Resource<UserBean>> loginUser(@Body RequestBody user);
 
 }

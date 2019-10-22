@@ -3,10 +3,7 @@ package com.lxb.mvvmproject.base;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-
-import java.util.ArrayList;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -23,6 +20,7 @@ public abstract class BaseViewModel extends AndroidViewModel {
         super(application);
         compositeDisposable = new CompositeDisposable();
     }
+
 
 
     @Override

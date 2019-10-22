@@ -4,14 +4,16 @@ import android.app.Activity;
 import android.app.Application;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.lxb.mvvmproject.base.BaseViewModel;
-import com.lxb.mvvmproject.bean.Bean;
+import com.lxb.mvvmproject.bean.UserBean;
 import com.lxb.mvvmproject.config.Config;
 import com.lxb.mvvmproject.network.Api;
 import com.lxb.mvvmproject.network.BaseObserver;
+import com.lxb.mvvmproject.network.Resource;
 import com.lxb.mvvmproject.network.RxSchedulers;
+import com.lxb.mvvmproject.network.util.GsonUtils;
+import com.lxb.mvvmproject.network.util.PostJson;
 import com.lxb.mvvmproject.ui.activity.bluetooth.BlueToothActivity;
 import com.lxb.mvvmproject.ui.activity.camera.CameraActivity;
 import com.lxb.mvvmproject.ui.activity.crash.CrashActivity;
@@ -25,6 +27,7 @@ import com.lxb.mvvmproject.util.permissions.Permission;
 import com.lxb.mvvmproject.util.permissions.XXPermissions;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.disposables.Disposable;
@@ -33,7 +36,7 @@ public class HomeViewModel extends BaseViewModel {
     //首页列表数据源
     private MutableLiveData<List<String>> listMutableLiveData;
     //模拟接口数据
-    private MutableLiveData<Bean> mData;
+    private MutableLiveData<Resource<String>> mData;
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
@@ -45,7 +48,7 @@ public class HomeViewModel extends BaseViewModel {
         return listMutableLiveData;
     }
 
-    public MutableLiveData<Bean> getData() {
+    public MutableLiveData<Resource<String>> getData() {
         return mData;
     }
 
@@ -56,22 +59,42 @@ public class HomeViewModel extends BaseViewModel {
 
     //模拟网络请求方法，直接调用即可
     public void http() {
-        Api.getInstance().getApiService().getUserAgreement().compose(RxSchedulers.applySchedulers()).subscribe(new BaseObserver<Bean>() {
+        Api.getInstance().getApiService().getUserAgreement().compose(RxSchedulers.applySchedulers()).subscribe(new BaseObserver<Resource<String>>() {
             @Override
-            public void onSuccess(Bean s) {
+            public void onSuccess(Resource<String> s) {
                 getData().postValue(s);
             }
 
             @Override
-            public void onFail(Throwable e) {
-                Log.e("浪", e.getLocalizedMessage());
+            public void onFail(Resource<String> e) {
+
             }
+
 
             @Override
             public void onSubscribes(Disposable e) {
                 compositeDisposable.add(e);
             }
         });
+        /*HashMap<String,Object> map=new HashMap<>();
+        map.put("account","13138895762");
+        map.put("password","1234567");
+        Api.getInstance().getApiService().loginUser(PostJson.toRequestBody(GsonUtils.toJson(map))).compose(RxSchedulers.applySchedulers()).subscribe(new BaseObserver<Resource<UserBean>>() {
+            @Override
+            public void onSuccess(Resource<UserBean> s) {
+                getData().postValue(s);
+            }
+
+            @Override
+            public void onFail(Resource<UserBean> e) {
+                getData().postValue(e);
+            }
+
+            @Override
+            public void onSubscribes(Disposable e) {
+                compositeDisposable.add(e);
+            }
+        });*/
     }
 
     /**
@@ -95,7 +118,7 @@ public class HomeViewModel extends BaseViewModel {
             CustomActivity.start(context);
         } else if (position == 6) {//蓝牙
             BlueToothActivity.start(context);
-        } else if (position == 7) {//蓝牙
+        } else if (position == 7) {//音乐播放器
             permissions(context);
         }
     }

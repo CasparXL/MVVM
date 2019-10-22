@@ -21,6 +21,7 @@ import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleGattCallback;
 import com.clj.fastble.callback.BleScanCallback;
 import com.clj.fastble.data.BleDevice;
+import com.clj.fastble.data.BleScanState;
 import com.clj.fastble.exception.BleException;
 import com.clj.fastble.scan.BleScanRuleConfig;
 import com.lxb.mvvmproject.R;
@@ -80,6 +81,9 @@ public class BlueToothActivity extends BaseActivity<BlueToothViewModel, Activity
     @Override
     protected void onStop() {
         super.onStop();
+        if (BleManager.getInstance().getScanSate()==BleScanState.STATE_SCANNING){//如果正在扫描，则取消扫描
+            BleManager.getInstance().cancelScan();
+        }
         BleManager.getInstance().disconnectAllDevice();
     }
 

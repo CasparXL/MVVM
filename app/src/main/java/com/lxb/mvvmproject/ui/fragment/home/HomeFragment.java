@@ -2,25 +2,16 @@ package com.lxb.mvvmproject.ui.fragment.home;
 
 import android.arch.lifecycle.Observer;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lxb.mvvmproject.R;
 import com.lxb.mvvmproject.base.BaseFragment;
-import com.lxb.mvvmproject.bean.Bean;
+import com.lxb.mvvmproject.bean.UserBean;
 import com.lxb.mvvmproject.databinding.FragmentHomeBinding;
-import com.lxb.mvvmproject.ui.activity.bluetooth.BlueToothActivity;
-import com.lxb.mvvmproject.ui.activity.camera.CameraActivity;
-import com.lxb.mvvmproject.ui.activity.crash.CrashActivity;
-import com.lxb.mvvmproject.ui.activity.custom.CustomActivity;
-import com.lxb.mvvmproject.ui.activity.fingerprint.FingerPrintActivity;
-import com.lxb.mvvmproject.ui.activity.photograph.PhotographActivity;
-import com.lxb.mvvmproject.ui.activity.skeleton.SkeletonActivity;
+import com.lxb.mvvmproject.network.Resource;
 import com.lxb.mvvmproject.ui.adapter.HomeAdapter;
-import com.lxb.mvvmproject.util.LogUtil;
 import com.lxb.mvvmproject.util.annotations.ContentView;
 
 import java.util.ArrayList;
@@ -48,23 +39,27 @@ public class HomeFragment extends BaseFragment<HomeViewModel, FragmentHomeBindin
                 }
             }
         });
-        viewModel.getData().observe(this, new Observer<Bean>() {
+        viewModel.getData().observe(this, new Observer<Resource<String>>() {//模拟网络请求
             @Override
-            public void onChanged(@Nullable Bean s) {
-                if (s != null)
-                    toast(s.getData());
+            public void onChanged(@Nullable Resource<String> s) {
+                if (s != null) {
+                    if (s.isSuccess()) {
+                        toast(s.getData());
+                    } else {
+                        toast(s.getMsg());
+                    }
+                }
             }
         });
         viewModel.initAdapter();
+//        viewModel.http();
     }
-
 
     //功能点击事件
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         viewModel.start(position, getActivity());
     }
-
 
 
 }

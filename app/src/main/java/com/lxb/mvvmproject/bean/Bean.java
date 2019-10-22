@@ -1,7 +1,5 @@
 package com.lxb.mvvmproject.bean;
 
-import android.databinding.ObservableField;
-
 import java.io.Serializable;
 
 /**

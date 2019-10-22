@@ -14,62 +14,96 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/iv_play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_50"
-            android:padding="@dimen/dp_20"
-            android:src="@android:drawable/ic_media_play"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_record_play"
-            app:layout_constraintTop_toBottomOf="@+id/sb_progress" />
-
-
-        <ImageView
-            android:id="@+id/iv_record_play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_50"
-            android:padding="@dimen/dp_20"
-            android:src="@android:drawable/ic_media_play"
-            app:layout_constraintEnd_toStartOf="@+id/iv_play"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sb_progress" />
-
-        <SeekBar
-            android:id="@+id/sb_progress"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_list"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:max="100"
-            android:progress="0"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_time_start"
-            app:layout_constraintEnd_toStartOf="@+id/tv_time_end"
-            app:layout_constraintStart_toEndOf="@+id/tv_time_start"
-            app:layout_constraintTop_toTopOf="@+id/tv_time_start" />
-
-        <TextView
-            android:id="@+id/tv_time_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_20"
-            android:text="00:00"
-            android:textSize="@dimen/sp_18"
+            android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include" />
-
-        <TextView
-            android:id="@+id/tv_time_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00:00"
-            android:textSize="@dimen/sp_18"
-            app:layout_constraintBottom_toBottomOf="@+id/sb_progress"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/sb_progress" />
+            app:layout_constraintTop_toBottomOf="@+id/include"
+            app:layout_constraintBottom_toTopOf="@+id/cl_bottom"
+            />
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cl_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_80"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
+            <ImageView
+                android:id="@+id/iv_img"
+                android:layout_width="@dimen/dp_80"
+                android:layout_height="0dp"
+                android:src="@mipmap/ic_loading"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_start" />
 
+            <ImageView
+                android:id="@+id/iv_last"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@android:drawable/ic_media_previous"
+                app:layout_constraintEnd_toStartOf="@+id/iv_play"
+                app:layout_constraintStart_toEndOf="@+id/iv_img"
+                app:layout_constraintTop_toTopOf="@+id/iv_img"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
+            <ImageView
+                android:id="@+id/iv_play"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@android:drawable/ic_media_play"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iv_next"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/iv_last"
+                app:layout_constraintTop_toTopOf="@+id/iv_last" />
+
+            <ImageView
+                android:id="@+id/iv_next"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@android:drawable/ic_media_next"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/iv_play"
+                app:layout_constraintTop_toTopOf="@+id/iv_play" />
+
+            <SeekBar
+                android:id="@+id/sb_progress"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_4"
+                android:max="100"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_marginStart="@dimen/dp_5"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_start"
+                app:layout_constraintEnd_toStartOf="@+id/tv_end"
+                app:layout_constraintStart_toEndOf="@+id/tv_start"
+                app:layout_constraintTop_toTopOf="@+id/tv_start" />
+
+            <TextView
+                android:id="@+id/tv_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_5"
+                android:text="00:00"
+                android:textSize="@dimen/sp_16"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:textSize="@dimen/sp_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
 </layout>

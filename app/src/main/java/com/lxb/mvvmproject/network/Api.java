@@ -87,8 +87,6 @@ public class Api {
                 .baseUrl(ApiConstants.BaseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 //支持RxJava2
-//                .addCallAdapterFactory(LiveDataCallAdapterFactory.create())
-//                .addConverterFactory(LiveDataResponseBodyConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(getUnsafeOkHttpClient())
                 .build();
