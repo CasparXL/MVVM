@@ -32,6 +32,7 @@ import com.lxb.mvvmproject.databinding.ActivityBlueToothBinding;
 import com.lxb.mvvmproject.ui.adapter.DeviceAdapter;
 import com.lxb.mvvmproject.util.annotations.ContentView;
 import com.lxb.mvvmproject.util.comm.ObserverManager;
+import com.lxb.mvvmproject.util.listener.ListFactory;
 import com.lxb.mvvmproject.util.permissions.OnPermission;
 import com.lxb.mvvmproject.util.permissions.Permission;
 import com.lxb.mvvmproject.util.permissions.XXPermissions;
@@ -48,7 +49,6 @@ import java.util.UUID;
 public class BlueToothActivity extends BaseActivity<BlueToothViewModel, ActivityBlueToothBinding> {
     private Animation operatingAnim;
     private DeviceAdapter adapter;
-    List<BleDevice> mList;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, BlueToothActivity.class);
@@ -81,7 +81,7 @@ public class BlueToothActivity extends BaseActivity<BlueToothViewModel, Activity
     @Override
     protected void onStop() {
         super.onStop();
-        if (BleManager.getInstance().getScanSate()==BleScanState.STATE_SCANNING){//如果正在扫描，则取消扫描
+        if (BleManager.getInstance().getScanSate() == BleScanState.STATE_SCANNING) {//如果正在扫描，则取消扫描
             BleManager.getInstance().cancelScan();
         }
         BleManager.getInstance().disconnectAllDevice();
@@ -92,14 +92,13 @@ public class BlueToothActivity extends BaseActivity<BlueToothViewModel, Activity
      * 初始化适配器
      */
     private void initAdapter() {
-        mList = new ArrayList<>();
-        adapter = new DeviceAdapter(mList);
+        adapter = new DeviceAdapter(viewModel.listMutableLiveData);
         bindingView.rvList.setLayoutManager(new LinearLayoutManager(this));
         bindingView.rvList.setAdapter(adapter);
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                BleDevice bleDevice = mList.get(position);
+                BleDevice bleDevice = viewModel.listMutableLiveData.get(position);
                 if (view.getId() == R.id.btn_connect) {//连接蓝牙
                     if (!BleManager.getInstance().isConnected(bleDevice)) {
                         BleManager.getInstance().cancelScan();
@@ -114,6 +113,8 @@ public class BlueToothActivity extends BaseActivity<BlueToothViewModel, Activity
                 }
             }
         });
+        viewModel.listMutableLiveData.addOnListChangedCallback(new ListFactory<BleDevice>().getCallback(adapter));
+//        viewModel.listMutableLiveData.addOnListChangedCallback(ListFactory.getListChangedCallback(adapter));
     }
 
     private void checkPermissions() {
@@ -141,13 +142,12 @@ public class BlueToothActivity extends BaseActivity<BlueToothViewModel, Activity
 
     }
 
-    BleScanCallback bleScanCallback=new BleScanCallback() {
+    BleScanCallback bleScanCallback = new BleScanCallback() {
         @Override
         public void onScanStarted(boolean success) {
             if (isFinishing()) return;
             //开始扫描
-            mList.clear();
-            adapter.notifyDataSetChanged();
+            viewModel.listMutableLiveData.clear();
             bindingView.ivLoad.startAnimation(operatingAnim);
             bindingView.ivLoad.setVisibility(View.VISIBLE);
             bindingView.btnSearch.setText("停止扫描");
@@ -162,8 +162,8 @@ public class BlueToothActivity extends BaseActivity<BlueToothViewModel, Activity
         public void onScanning(BleDevice bleDevice) {
             if (isFinishing()) return;
             addDevice(bleDevice);
-            if (mList.size() % 5 == 0) {
-                adapter.notifyDataSetChanged();
+            if (viewModel.listMutableLiveData.size() % 5 == 0) {
+//                adapter.notifyDataSetChanged();
             }
             //有新数据加入
             Log.e("浪", "加入蓝牙数据,名称:" + bleDevice.getName() + ",Mac:" + bleDevice.getMac() + ",信号:" + bleDevice.getRssi());
@@ -172,14 +172,15 @@ public class BlueToothActivity extends BaseActivity<BlueToothViewModel, Activity
         @Override
         public void onScanFinished(List<BleDevice> scanResultList) {
             if (isFinishing()) return;
-            Log.e("浪", "加入蓝牙数据完成,总数据：" + mList.size());
-            adapter.notifyDataSetChanged();
+            Log.e("浪", "加入蓝牙数据完成,总数据：" + viewModel.listMutableLiveData.size());
+//            adapter.notifyDataSetChanged();
             //搜索完成
             bindingView.ivLoad.clearAnimation();
             bindingView.ivLoad.setVisibility(View.GONE);
             bindingView.btnSearch.setText("开始扫描");
         }
     };
+
     //开始扫描
     private void startScan() {
         BleManager.getInstance().scan(bleScanCallback);
@@ -199,9 +200,9 @@ public class BlueToothActivity extends BaseActivity<BlueToothViewModel, Activity
             @Override
             public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
                 if (isFinishing()) return;
-                mList.add(bleDevice);
+                viewModel.listMutableLiveData.add(bleDevice);
                 addDevice(bleDevice);
-                adapter.notifyDataSetChanged();
+//                adapter.notifyDataSetChanged();
                 toast("连接成功");
             }
 
@@ -210,7 +211,7 @@ public class BlueToothActivity extends BaseActivity<BlueToothViewModel, Activity
                 if (isFinishing()) return;
                 addDevice(bleDevice);
                 removeDevice(bleDevice);
-                adapter.notifyDataSetChanged();
+//                adapter.notifyDataSetChanged();
 
                 if (isActiveDisConnected) {
                     toast("断开了");
@@ -225,14 +226,14 @@ public class BlueToothActivity extends BaseActivity<BlueToothViewModel, Activity
 
     public void addDevice(BleDevice bleDevice) {
         removeDevice(bleDevice);
-        mList.add(bleDevice);
+        viewModel.listMutableLiveData.add(bleDevice);
     }
 
     public void removeDevice(BleDevice bleDevice) {
-        for (int i = 0; i < mList.size(); i++) {
-            BleDevice device = mList.get(i);
+        for (int i = 0; i < viewModel.listMutableLiveData.size(); i++) {
+            BleDevice device = viewModel.listMutableLiveData.get(i);
             if (bleDevice.getKey().equals(device.getKey())) {
-                mList.remove(i);
+                viewModel.listMutableLiveData.remove(i);
                 i--;
             }
         }

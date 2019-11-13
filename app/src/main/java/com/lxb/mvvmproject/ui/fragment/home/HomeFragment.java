@@ -8,11 +8,11 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lxb.mvvmproject.R;
 import com.lxb.mvvmproject.base.BaseFragment;
-import com.lxb.mvvmproject.bean.UserBean;
 import com.lxb.mvvmproject.databinding.FragmentHomeBinding;
 import com.lxb.mvvmproject.network.Resource;
 import com.lxb.mvvmproject.ui.adapter.HomeAdapter;
 import com.lxb.mvvmproject.util.annotations.ContentView;
+import com.lxb.mvvmproject.util.listener.ListFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,24 +21,14 @@ import java.util.List;
 public class HomeFragment extends BaseFragment<HomeViewModel, FragmentHomeBinding> implements BaseQuickAdapter.OnItemClickListener {
 
     HomeAdapter adapter;
-    List<String> mList;
 
     @Override
     public void initView() {
-        mList = new ArrayList<>();
-        adapter = new HomeAdapter(mList);
+        adapter = new HomeAdapter(viewModel.listMutableLiveData);
         bindingView.rvList.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter.setOnItemClickListener(this);
         bindingView.rvList.setAdapter(adapter);
-        viewModel.getListMutableLiveData().observe(this, new Observer<List<String>>() {
-            @Override
-            public void onChanged(@Nullable List<String> strings) {
-                if (strings != null) {
-                    mList.addAll(strings);
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        });
+        viewModel.listMutableLiveData.addOnListChangedCallback(new ListFactory<String>().getCallback(adapter));
         viewModel.getData().observe(this, new Observer<Resource<String>>() {//模拟网络请求
             @Override
             public void onChanged(@Nullable Resource<String> s) {
@@ -52,7 +42,6 @@ public class HomeFragment extends BaseFragment<HomeViewModel, FragmentHomeBindin
             }
         });
         viewModel.initAdapter();
-//        viewModel.http();
     }
 
     //功能点击事件

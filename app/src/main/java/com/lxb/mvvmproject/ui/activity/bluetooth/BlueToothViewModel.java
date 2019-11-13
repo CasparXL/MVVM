@@ -3,7 +3,9 @@ package com.lxb.mvvmproject.ui.activity.bluetooth;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
+import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
+import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -26,8 +28,11 @@ import io.reactivex.disposables.Disposable;
 
 public class BlueToothViewModel extends BaseViewModel {
 
+    public ObservableList<BleDevice> listMutableLiveData;
+
     public BlueToothViewModel(@NonNull Application application) {
         super(application);
+        listMutableLiveData = new ObservableArrayList<>();
     }
 
     //配置扫描参数

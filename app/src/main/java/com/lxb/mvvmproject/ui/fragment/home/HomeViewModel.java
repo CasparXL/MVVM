@@ -3,6 +3,8 @@ package com.lxb.mvvmproject.ui.fragment.home;
 import android.app.Activity;
 import android.app.Application;
 import android.arch.lifecycle.MutableLiveData;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
 
 import com.lxb.mvvmproject.base.BaseViewModel;
@@ -12,8 +14,6 @@ import com.lxb.mvvmproject.network.Api;
 import com.lxb.mvvmproject.network.BaseObserver;
 import com.lxb.mvvmproject.network.Resource;
 import com.lxb.mvvmproject.network.RxSchedulers;
-import com.lxb.mvvmproject.network.util.GsonUtils;
-import com.lxb.mvvmproject.network.util.PostJson;
 import com.lxb.mvvmproject.ui.activity.bluetooth.BlueToothActivity;
 import com.lxb.mvvmproject.ui.activity.camera.CameraActivity;
 import com.lxb.mvvmproject.ui.activity.crash.CrashActivity;
@@ -27,25 +27,20 @@ import com.lxb.mvvmproject.util.permissions.Permission;
 import com.lxb.mvvmproject.util.permissions.XXPermissions;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 
 public class HomeViewModel extends BaseViewModel {
     //首页列表数据源
-    private MutableLiveData<List<String>> listMutableLiveData;
+    public ObservableList<String> listMutableLiveData;
     //模拟接口数据
     private MutableLiveData<Resource<String>> mData;
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
-        listMutableLiveData = new MutableLiveData<>();
+        listMutableLiveData = new ObservableArrayList<>();
         mData = new MutableLiveData<>();
-    }
-
-    public MutableLiveData<List<String>> getListMutableLiveData() {
-        return listMutableLiveData;
     }
 
     public MutableLiveData<Resource<String>> getData() {
@@ -54,7 +49,7 @@ public class HomeViewModel extends BaseViewModel {
 
     //初始化适配器数据
     public void initAdapter() {
-        getListMutableLiveData().postValue(Arrays.asList(Config.FUNCTION));
+        listMutableLiveData.addAll(Arrays.asList(Config.FUNCTION));
     }
 
     //模拟网络请求方法，直接调用即可
