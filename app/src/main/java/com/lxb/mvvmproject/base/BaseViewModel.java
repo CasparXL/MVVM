@@ -13,15 +13,13 @@ import io.reactivex.disposables.CompositeDisposable;
  */
 
 public abstract class BaseViewModel extends AndroidViewModel {
-    //这个是为了退出页面，取消请求的
+    //管理RxJava，主要针对RxJava异步操作造成的内存泄漏
     public CompositeDisposable compositeDisposable;
 
     public BaseViewModel(@NonNull Application application) {
         super(application);
         compositeDisposable = new CompositeDisposable();
     }
-
-
 
     @Override
     protected void onCleared() {

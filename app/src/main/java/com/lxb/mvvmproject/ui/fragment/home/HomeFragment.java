@@ -29,7 +29,7 @@ public class HomeFragment extends BaseFragment<HomeViewModel, FragmentHomeBindin
         adapter.setOnItemClickListener(this);
         bindingView.rvList.setAdapter(adapter);
         viewModel.listMutableLiveData.addOnListChangedCallback(new ListFactory<String>().getCallback(adapter));
-        viewModel.getData().observe(this, new Observer<Resource<String>>() {//模拟网络请求
+        viewModel.mData.observe(this, new Observer<Resource<String>>() {//模拟网络请求
             @Override
             public void onChanged(@Nullable Resource<String> s) {
                 if (s != null) {
@@ -42,6 +42,12 @@ public class HomeFragment extends BaseFragment<HomeViewModel, FragmentHomeBindin
             }
         });
         viewModel.initAdapter();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.http();
     }
 
     //功能点击事件

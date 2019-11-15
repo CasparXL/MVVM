@@ -33,9 +33,9 @@ import io.reactivex.disposables.Disposable;
 
 public class HomeViewModel extends BaseViewModel {
     //首页列表数据源
-    public ObservableList<String> listMutableLiveData;
+    ObservableList<String> listMutableLiveData;
     //模拟接口数据
-    private MutableLiveData<Resource<String>> mData;
+    MutableLiveData<Resource<String>> mData;
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
@@ -43,9 +43,6 @@ public class HomeViewModel extends BaseViewModel {
         mData = new MutableLiveData<>();
     }
 
-    public MutableLiveData<Resource<String>> getData() {
-        return mData;
-    }
 
     //初始化适配器数据
     public void initAdapter() {
@@ -57,7 +54,7 @@ public class HomeViewModel extends BaseViewModel {
         Api.getInstance().getApiService().getUserAgreement().compose(RxSchedulers.applySchedulers()).subscribe(new BaseObserver<Resource<String>>() {
             @Override
             public void onSuccess(Resource<String> s) {
-                getData().postValue(s);
+                mData.postValue(s);
             }
 
             @Override
@@ -71,25 +68,6 @@ public class HomeViewModel extends BaseViewModel {
                 compositeDisposable.add(e);
             }
         });
-        /*HashMap<String,Object> map=new HashMap<>();
-        map.put("account","13138895762");
-        map.put("password","1234567");
-        Api.getInstance().getApiService().loginUser(PostJson.toRequestBody(GsonUtils.toJson(map))).compose(RxSchedulers.applySchedulers()).subscribe(new BaseObserver<Resource<UserBean>>() {
-            @Override
-            public void onSuccess(Resource<UserBean> s) {
-                getData().postValue(s);
-            }
-
-            @Override
-            public void onFail(Resource<UserBean> e) {
-                getData().postValue(e);
-            }
-
-            @Override
-            public void onSubscribes(Disposable e) {
-                compositeDisposable.add(e);
-            }
-        });*/
     }
 
     /**
@@ -132,5 +110,6 @@ public class HomeViewModel extends BaseViewModel {
             }
         });
     }
+
 
 }

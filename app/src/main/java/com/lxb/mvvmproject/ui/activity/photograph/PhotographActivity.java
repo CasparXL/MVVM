@@ -1,9 +1,11 @@
 package com.lxb.mvvmproject.ui.activity.photograph;
 
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,6 +16,7 @@ import com.lxb.mvvmproject.base.BaseActivity;
 import com.lxb.mvvmproject.base.NoViewModel;
 import com.lxb.mvvmproject.config.Config;
 import com.lxb.mvvmproject.databinding.ActivityPhotographBinding;
+import com.lxb.mvvmproject.network.Resource;
 import com.lxb.mvvmproject.util.LogUtil;
 import com.lxb.mvvmproject.util.annotations.ContentView;
 import com.lxb.mvvmproject.util.image.FileUtil;
@@ -52,6 +55,19 @@ public class PhotographActivity extends BaseActivity<PhotographModel, ActivityPh
         bindingView.btnSelectImg.setOnClickListener(v -> permission(1));
         bindingView.btnOpenAlbum.setOnClickListener(v -> permission(2));
         bindingView.include.tvBack.setOnClickListener(v -> finish());
+        viewModel.mData.observe(this, new Observer<Resource<String>>() {//模拟网络请求
+            @Override
+            public void onChanged(@Nullable Resource<String> s) {
+                if (s != null) {
+                    if (s.isSuccess()) {
+                        toast(s.getData());
+                    } else {
+                        toast(s.getMsg());
+                    }
+                }
+            }
+        });
+        viewModel.http();
     }
 
     @Override

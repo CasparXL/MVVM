@@ -162,9 +162,6 @@ public class BlueToothActivity extends BaseActivity<BlueToothViewModel, Activity
         public void onScanning(BleDevice bleDevice) {
             if (isFinishing()) return;
             addDevice(bleDevice);
-            if (viewModel.listMutableLiveData.size() % 5 == 0) {
-//                adapter.notifyDataSetChanged();
-            }
             //有新数据加入
             Log.e("浪", "加入蓝牙数据,名称:" + bleDevice.getName() + ",Mac:" + bleDevice.getMac() + ",信号:" + bleDevice.getRssi());
         }
@@ -173,7 +170,6 @@ public class BlueToothActivity extends BaseActivity<BlueToothViewModel, Activity
         public void onScanFinished(List<BleDevice> scanResultList) {
             if (isFinishing()) return;
             Log.e("浪", "加入蓝牙数据完成,总数据：" + viewModel.listMutableLiveData.size());
-//            adapter.notifyDataSetChanged();
             //搜索完成
             bindingView.ivLoad.clearAnimation();
             bindingView.ivLoad.setVisibility(View.GONE);
@@ -202,7 +198,6 @@ public class BlueToothActivity extends BaseActivity<BlueToothViewModel, Activity
                 if (isFinishing()) return;
                 viewModel.listMutableLiveData.add(bleDevice);
                 addDevice(bleDevice);
-//                adapter.notifyDataSetChanged();
                 toast("连接成功");
             }
 
@@ -211,8 +206,6 @@ public class BlueToothActivity extends BaseActivity<BlueToothViewModel, Activity
                 if (isFinishing()) return;
                 addDevice(bleDevice);
                 removeDevice(bleDevice);
-//                adapter.notifyDataSetChanged();
-
                 if (isActiveDisConnected) {
                     toast("断开了");
                 } else {
@@ -237,7 +230,7 @@ public class BlueToothActivity extends BaseActivity<BlueToothViewModel, Activity
                 i--;
             }
         }
+
+
     }
-
-
 }
