@@ -4,15 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import org.w3c.dom.Document;
-
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.xml.parsers.DocumentBuilder;
 
 
 /**
@@ -24,7 +20,7 @@ import javax.xml.parsers.DocumentBuilder;
  * </pre>
  */
 public final class GsonUtils {
-
+//GsonUtils.fromJson(text,new TypeToken<BaseResponse<List<LightInfoBean>>>(){}.getType() )
     private static final Gson GSON = createGson(true);
 
     private static final Gson GSON_NO_NULLS = createGson(false);

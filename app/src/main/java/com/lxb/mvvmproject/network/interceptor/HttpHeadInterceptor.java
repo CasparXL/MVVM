@@ -1,5 +1,9 @@
 package com.lxb.mvvmproject.network.interceptor;
 
+
+
+
+
 import com.lxb.mvvmproject.app.BaseApplication;
 import com.lxb.mvvmproject.network.util.CheckNetwork;
 

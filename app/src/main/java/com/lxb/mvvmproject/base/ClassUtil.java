@@ -1,9 +1,7 @@
 package com.lxb.mvvmproject.base;
 
-import android.arch.lifecycle.AndroidViewModel;
 
-
-import com.lxb.mvvmproject.base.NoViewModel;
+import androidx.lifecycle.AndroidViewModel;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -19,7 +17,7 @@ public class ClassUtil {
     public static <T> Class<T> getViewModel(Object obj) {
         Class<?> currentClass = obj.getClass();
         Class<T> tClass = getGenericClass(currentClass, AndroidViewModel.class);
-        if (tClass == null || tClass == AndroidViewModel.class || tClass == NoViewModel.class|| tClass == BaseViewModel.class) {
+        if (tClass == null || tClass == AndroidViewModel.class || tClass == NoViewModel.class) {
             return null;
         }
         return tClass;
@@ -38,4 +36,6 @@ public class ClassUtil {
         }
         return null;
     }
+
+
 }

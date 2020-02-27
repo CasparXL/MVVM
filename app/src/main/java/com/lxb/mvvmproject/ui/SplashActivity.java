@@ -56,7 +56,6 @@ public class SplashActivity extends BaseActivity<NoViewModel, ActivitySplashBind
 
     public void run() {
         startActivity(new Intent(SplashActivity.this, MainActivity.class));
-        overridePendingTransition(R.anim.screen_zoom_in, R.anim.screen_zoom_out);
         finish();
     }
 

@@ -3,11 +3,13 @@ package com.lxb.mvvmproject.network;
 
 import android.annotation.SuppressLint;
 
+
 import com.lxb.mvvmproject.BuildConfig;
 import com.lxb.mvvmproject.app.BaseApplication;
 import com.lxb.mvvmproject.network.interceptor.AddCacheInterceptor;
 import com.lxb.mvvmproject.network.interceptor.AddCookiesInterceptor;
 import com.lxb.mvvmproject.network.interceptor.HttpHeadInterceptor;
+import com.lxb.mvvmproject.network.interceptor.HttpLoggingInterceptor;
 import com.lxb.mvvmproject.network.interceptor.ReceivedCookiesInterceptor;
 
 import java.io.File;
@@ -25,11 +27,11 @@ import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
-import okhttp3.internal.cache.CacheInterceptor;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
+
 
 /**
  * "浪小白" 创建 2019/7/1.
@@ -37,10 +39,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class Api {
-    private static Api mApi;
+    private volatile static Api mApi;
     private ApiService apiServer;
     private static final int DEFAULT_TIMEOUT = 30;
-
+    public static Api getInstance() {
+        if (mApi == null) {
+            synchronized (Api.class) {
+                if (mApi == null) {
+                    mApi = new Api();
+                }
+            }
+        }
+        return mApi;
+    }
     private OkHttpClient getUnsafeOkHttpClient() {
         try {
             // Install the all-trusting trust manager TLS
@@ -63,11 +74,9 @@ public class Api {
             okBuilder.addInterceptor(new ReceivedCookiesInterceptor());
             okBuilder.addInterceptor(new AddCookiesInterceptor());
             // 添加缓存，无网访问时会拿缓存,只会缓存get请求
-            okBuilder.addInterceptor(new AddCacheInterceptor());
+            okBuilder.addInterceptor(new AddCacheInterceptor());//本app不需要缓存网络数据，避免数据混乱。
             okBuilder.cache(cache);
-            okBuilder.addInterceptor(new HttpLoggingInterceptor()
-                    .setLevel(BuildConfig.DEBUG ?
-                            HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE));
+            okBuilder.addInterceptor(new HttpLoggingInterceptor().setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE));
             okBuilder.hostnameVerifier(new HostnameVerifier() {
                 @SuppressLint("BadHostnameVerifier")
                 @Override
@@ -85,6 +94,9 @@ public class Api {
         //支持RxJava2
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ApiConstants.BaseUrl)
+                //添加ScalarsConverterFactory支持
+                .addConverterFactory(ScalarsConverterFactory.create())
+                //可以接收自定义的Gson，当然也可以不传
                 .addConverterFactory(GsonConverterFactory.create())
                 //支持RxJava2
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -93,20 +105,12 @@ public class Api {
         apiServer = retrofit.create(ApiService.class);
     }
 
-    public static Api getInstance() {
-        if (mApi == null) {
-            synchronized (Object.class) {
-                if (mApi == null) {
-                    mApi = new Api();
-                }
-            }
-        }
-        return mApi;
-    }
+
 
     public ApiService getApiService() {
         return apiServer;
     }
+
 
     private TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
         @Override
@@ -122,4 +126,7 @@ public class Api {
             return new X509Certificate[]{};
         }
     }};
+
+
+
 }

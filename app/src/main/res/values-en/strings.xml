@@ -1,34 +1,27 @@
 <resources>
     <string name="app_name">MVVM项目</string>
-    <string name="show_error_content">An unexpected error occurred. \n sorry for the inconvenience.</string>
-    <string name="restart_app">Restart</string>
-    <string name="close_app">Close App</string>
-    <string name="error_content">Error Log</string>
-    <string name="error_detail">Error Details</string>
-    <string name="close">Close</string>
-    <string name="copy_content">Copy The Log</string>
-    <string name="error_details">Error Message</string>
-    <string name="home">Home</string>
-    <string name="mine">Mine</string>
-
+    <!--InjectManager辅助工具类所需要的资源文件-->
     <string name="layout_id_error">\n\tLayout id error\n\tPlease set activity @ContentView \n\t The sample: @ContentView(R.layout.main_activity)</string>
     <string name="content_view_empty">\n\tPlease set activity @ContentView \n\t The sample: @ContentView(R.layout.main_activity)</string>
+    <!--网络请求异常状态-->
+    <string name="connect_error">Network connection failed. Please check the network</string>
+    <string name="connect_timeout">The connection has timed out. Please try again later</string>
+    <string name="bad_network">Server exception</string>
+    <string name="parse_error">Parse server response data failed</string>
+    <string name="unknown_error">unknown error</string>
+    <string name="response_return_error">The server failed to return data</string>
+    <!--捕获崩溃的界面需要的文字-->
+    <string name="crash_error_hint">Unexpected error \n sorry for the inconvenience</string>
+    <string name="crash_error_restart">Restart</string>
+    <string name="crash_error_log">Error log</string>
+    <string name="crash_error_details">Error details</string>
+    <string name="crash_error_info">Error message</string>
+    <string name="crash_copy_log">Copy</string>
+    <string name="crash_close">Close</string>
 
-    <!--指纹解锁文字-->
-    <string name="biometric_dialog_cancel">Cancel</string>
-    <string name="biometric_dialog_title">Verification</string>
-    <string name="biometric_dialog_subtitle">Verify fingerprint to continue</string>
-    <string name="biometric_dialog_state_normal">Fingerprint sensor</string>
-    <string name="biometric_dialog_state_failed">Failed to identify, please try again</string>
-    <string name="biometric_dialog_state_error">Verification error, please enter payment password</string>
-    <string name="biometric_dialog_state_error_enable_process">Verification error, setup failed</string>
-    <string name="biometric_dialog_state_succeeded">Verification successful</string>
-    <string name="biometric_dialog_use_password">Use Password</string>
-    <!--指纹解锁文字-->
-    <!--蓝牙-->
-    <string name="connect">Connect</string>
-    <string name="connected">Connected</string>
-    <string name="disconnect">Disconnect</string>
-    <string name="enter">Enter</string>
-    <!--蓝牙-->
+    <string name="home_exit_hint">Press again to exit</string>
+    <string name="time_title">Please select gateway</string>
+    <string name="common_confirm">OK</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_loading">Loading&#8230;</string>
 </resources>

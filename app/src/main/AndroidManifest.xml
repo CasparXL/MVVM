@@ -31,8 +31,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
+        <!-- androidx文件适配 -->
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -40,11 +42,20 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <!-- 错误拦截以及重启配置 -->
         <provider
-            android:name=".ui.activity.error.CaocInitProvider"
+            android:name=".ui.activity.crash.CaocInitProvider"
             android:authorities="${applicationId}.errorProvider"
             android:exported="false"
             android:initOrder="101" />
+
+        <activity
+            android:name=".ui.activity.crash.CrashActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleTop"
+            android:process=":crash"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" /> <!-- 错误拦截以及重启配置 -->
         <!-- 首页界面 -->
         <activity
             android:name=".ui.SplashActivity"
@@ -57,52 +68,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.activity.error.DefaultErrorActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:process=":error_activity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.mediarecorder.MediaRecorderActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.bluetooth.BlueToothActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.custom.customlist.canvas.CanvasActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.custom.customlist.introduction.IntroductionActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.custom.CustomActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.camera.CameraActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.photograph.PhotographActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.fingerprint.FingerPrintActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.skeleton.SkeletonActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.crash.CrashActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-
 
         <activity
             android:name=".ui.MainActivity"

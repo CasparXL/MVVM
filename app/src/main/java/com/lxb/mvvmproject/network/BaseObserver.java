@@ -1,6 +1,9 @@
 package com.lxb.mvvmproject.network;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.JsonParseException;
+import com.lxb.mvvmproject.bean.Resource;
 import com.lxb.mvvmproject.network.util.NetException;
 
 import org.json.JSONException;
@@ -11,7 +14,6 @@ import java.net.UnknownHostException;
 import java.text.ParseException;
 
 import io.reactivex.Observer;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 
 
@@ -38,6 +40,8 @@ public abstract class BaseObserver<T> implements Observer<T> {
             }else {
                 onFail(t);
             }
+        }else {
+            onSuccess(t);
         }
     }
 

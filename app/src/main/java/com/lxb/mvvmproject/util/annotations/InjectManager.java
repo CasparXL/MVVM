@@ -3,13 +3,14 @@ package com.lxb.mvvmproject.util.annotations;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 
+
+import androidx.fragment.app.Fragment;
 
 import com.lxb.mvvmproject.R;
 import com.lxb.mvvmproject.base.BaseFragment;

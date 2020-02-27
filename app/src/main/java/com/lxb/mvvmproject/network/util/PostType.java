@@ -3,7 +3,6 @@ package com.lxb.mvvmproject.network.util;
 import com.google.gson.Gson;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,20 +53,6 @@ public class PostType {
         return requestBodyMap;
     }
 
-    /**
-     * @param files
-     * @return
-     */
-    public static List<MultipartBody.Part> filesToMultipartBodyParts(List<File> files) {
-        List<MultipartBody.Part> parts = new ArrayList<>(files.size());
-        for (File file : files) {
-            // TODO: 16-4-2  这里为了简单起见，没有判断file的类型
-            RequestBody requestBody = RequestBody.create(MediaType.parse("image/png"), file);
-            MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
-            parts.add(part);
-        }
-        return parts;
-    }
     /**
      * @param Files 用于Retrofit的Post请求form表单数据过多可以使用该请求
      * @return

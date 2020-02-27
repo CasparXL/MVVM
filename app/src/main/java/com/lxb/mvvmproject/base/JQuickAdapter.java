@@ -1,16 +1,11 @@
 package com.lxb.mvvmproject.base;
 
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
-import com.lxb.mvvmproject.R;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 import java.util.List;
 
@@ -18,17 +13,11 @@ import java.util.List;
  * 自定义适配器
  *
  * @param <T> 实体类
- * @param <B> ViewBinding
  */
-public abstract class JQuickAdapter<T, B extends ViewDataBinding> extends BaseQuickAdapter<T, BaseViewHolder> {
-    private B binding;
+public abstract class JQuickAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
 
     public JQuickAdapter(int layoutResId) {
         super(layoutResId);
-    }
-
-    public JQuickAdapter(@Nullable List<T> data) {
-        super(data);
     }
 
     public JQuickAdapter(int layoutResId, @Nullable List<T> data) {
@@ -36,31 +25,8 @@ public abstract class JQuickAdapter<T, B extends ViewDataBinding> extends BaseQu
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, T item) {
-        binding = (B) helper.itemView.getTag(R.id.BaseQuickAdapter_databinding_support);
-        binding.executePendingBindings();
-        convert(helper, binding, item);
+    protected void onItemViewHolderCreated(BaseViewHolder viewHolder, int viewType) {
+        DataBindingUtil.bind(viewHolder.itemView);
     }
-
-    @Override
-    protected View getItemView(int layoutResId, ViewGroup parent) {
-        if (layoutResId != mLayoutResId) {
-            return super.getItemView(layoutResId, parent);
-        }
-        binding = DataBindingUtil.inflate(mLayoutInflater, layoutResId, parent, false);
-        View view = binding.getRoot();
-        view.setTag(R.id.BaseQuickAdapter_databinding_support, binding);
-        return view;
-    }
-
-    protected abstract void convert(BaseViewHolder helper, B binding, T item);
-
-    /**
-     * 绑定RecyclerView
-     */
-    public void bindToRecyclerView(RecyclerView recyclerView) {
-        super.bindToRecyclerView(recyclerView);
-    }
-
 
 }

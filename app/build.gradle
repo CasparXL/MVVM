@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+import org.aspectj.bridge.IMessage
+import org.aspectj.bridge.MessageHandler
+import org.aspectj.tools.ajc.Main
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     defaultConfig {
@@ -8,28 +11,41 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
-        multiDexEnabled true
-        //javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        ndk { //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
-            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "arm64-v8a", "x86_64"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true  //开启分包
+        // 使用矢量图支持库（为了兼容 API 21 以下）
+        // 阿里巴巴矢量图库：https://www.iconfont.cn/
+        vectorDrawables.useSupportLibrary = true
+        javaCompileOptions {
+            annotationProcessorOptions {
+                //开启路由
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+                //开启路由，并输出路由文件到build->generated->ap_generated_sources->debug->out->com->alibaba.android.arouter->docs->arouter-map-of-app.json
+                //arguments = [AROUTER_MODULE_NAME: project.getName(), AROUTER_GENERATE_DOC: "enable"]
+            }
         }
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled true   //开启混淆
+            zipAlignEnabled true  //压缩优化
+            shrinkResources true  //移出无用资源
             buildConfigField("boolean", "LOG_ENABLE", "false")//控制日志是否打印
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
         }
         debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled false   //开启混淆
+            zipAlignEnabled false  //压缩优化
+            shrinkResources false  //移出无用资源
             buildConfigField("boolean", "LOG_ENABLE", "true")//控制日志是否打印
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
         }
     }
 
     dataBinding {
-        enabled = true;
+        enabled = true
     }
     compileOptions {//使用JAVA8语法解析
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -38,54 +54,91 @@ android {
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
     }
-}
+    applicationVariants.all { variant ->
+        // AOP 输出配置
+        JavaCompile javaCompile
+        if (variant.hasProperty('javaCompileProvider')) {
+            // Gradle 4.10.1+ API 适配
+            TaskProvider<JavaCompile> provider = variant.javaCompileProvider
+            javaCompile = provider.get()
+        } else {
+            javaCompile = variant.hasProperty('javaCompiler') ? variant.javaCompiler : variant.javaCompile
+        }
+        javaCompile.doLast {
+            String[] args = ["-showWeaveInfo",
+                             "-1.8",
+                             "-inpath", javaCompile.destinationDir.toString(),
+                             "-aspectpath", javaCompile.classpath.asPath,
+                             "-d", javaCompile.destinationDir.toString(),
+                             "-classpath", javaCompile.classpath.asPath,
+                             "-bootclasspath", project.android.bootClasspath.join(File.pathSeparator)]
+            final def log = project.logger
+            MessageHandler handler = new MessageHandler(true)
+            new Main().run(args, handler)
+            for (IMessage message : handler.getMessages(null, true)) {
+                switch (message.getKind()) {
+                    case IMessage.ABORT:
+                    case IMessage.ERROR:
+                    case IMessage.FAIL:
+                        log.error message.message, message.thrown
+                        break
+                    case IMessage.WARNING:
+                        log.warn message.message, message.thrown
+                        break
+                    case IMessage.INFO:
+                        log.info message.message, message.thrown
+                        break
+                    case IMessage.DEBUG:
+                        log.debug message.message, message.thrown
+                        break
+                }
+            }
+        }
 
-dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    //android-support
-    implementation rootProject.ext.dependencies["appcompat-v7"]
-    implementation rootProject.ext.dependencies["support-v4"]
-    implementation rootProject.ext.dependencies["cardview"]
-    implementation rootProject.ext.dependencies["design"]
-    implementation rootProject.ext.dependencies["recyclerview"]
-    implementation rootProject.ext.dependencies["constraint-layout"]
-    //http
-    implementation rootProject.ext.dependencies["retrofit2"]
-    implementation rootProject.ext.dependencies["converter-scalars"]
-    implementation rootProject.ext.dependencies["converter-gson"]
-    implementation rootProject.ext.dependencies["adapter-rxjava2"]
-    implementation rootProject.ext.dependencies["logging-interceptor"]
-    //沉浸式
-    implementation rootProject.ext.dependencies["barlibrary"]
-    //适配器
-    implementation rootProject.ext.dependencies["BaseRecyclerViewAdapterHelper"]
-    //刷新
-    implementation rootProject.ext.dependencies["SmartRefreshLayout"]
-    //rxjava
-    implementation rootProject.ext.dependencies["rxjava2"]
-    implementation rootProject.ext.dependencies["rxandroid"]
-    //toast框架
-    implementation rootProject.ext.dependencies["toast"]
-    //鲁班压缩
-    implementation rootProject.ext.dependencies["Luban"]
-    //图片加载
-    implementation(rootProject.ext.dependencies["glide"]) {
-        exclude group: rootProject.ext.dependencies["support"]
+        // Apk 输出配置
+        variant.outputs.all { output ->
+            if (variant.buildType.name == buildTypes.debug.getName()) {
+                outputFileName = rootProject.getName() + '_v' + variant.versionName + '_' + variant.buildType.name + '.apk'
+            } else {
+                outputFileName = rootProject.getName() + '_v' + variant.versionName + '_' + new Date().format("yyyyMMdd") + '_' + variant.buildType.name + '.apk'
+            }
+        }
     }
+}
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+dependencies {
+    def libs = rootProject.ext.dependencies //依赖库配置
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation libs.androidx_appcompat
+    implementation libs.androidx_constraintlayout
+    implementation libs.androidx_multidex
+    implementation libs.smart_refresh
+    implementation libs.smart_header
+    implementation libs.lifecycle_api
+    implementation libs.retrofit_api
+    implementation libs.retrofit_gson
+    implementation libs.retrofit_rxjava2
+    implementation libs.retrofit_scalars
+    implementation libs.gson
+    implementation libs.immersionbar
+    implementation libs.glide
+    implementation libs.aspectj
+    implementation libs.arouter_api
+    implementation libs.androidx_recyclerview
+    implementation libs.rxandroid
+    implementation libs.toast
+    implementation libs.base_adapter
+    implementation libs.aspectj
+    implementation libs.google_material
+    implementation libs.qr_code
+    implementation libs.mmkv
+    // AOP 插件库
+    annotationProcessor libs.glide_compiler
+    annotationProcessor libs.arouter_compiler
+    testImplementation libs.junit
+    androidTestImplementation libs.test_ext
+    androidTestImplementation libs.test_espresso
 
-    //lifecycle
-    implementation rootProject.ext.dependencies["lifecycle"]
-    implementation rootProject.ext.dependencies["lifecycle-reactivestreams"]
-    //骨架屏幕
-    implementation 'com.ethanhua:skeleton:1.1.2'
-    implementation 'io.supercharge:shimmerlayout:2.1.0'
-
-    implementation 'com.clj.fastble:FastBleLib:2.3.4'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.2'
-
-
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 }

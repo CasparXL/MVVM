@@ -1,13 +1,10 @@
 package com.lxb.mvvmproject.network.interceptor;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.lxb.mvvmproject.app.BaseApplication;
+
+import com.lxb.mvvmproject.helper.MMKVUtil;
 import com.lxb.mvvmproject.util.LogUtil;
-import com.lxb.mvvmproject.util.SP;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -20,7 +17,7 @@ import okhttp3.Response;
 public class ReceivedCookiesInterceptor implements Interceptor {
 
     @Override
-    public Response intercept(Interceptor.Chain chain) throws IOException {
+    public Response intercept(Chain chain) throws IOException {
         Response originalResponse = chain.proceed(chain.request());
         //这里获取请求返回的cookie
         if (!originalResponse.headers("Set-Cookie").isEmpty()) {
@@ -28,7 +25,7 @@ public class ReceivedCookiesInterceptor implements Interceptor {
             LogUtil.e("------------得到的 cookies:" + d.toString());
             // 返回cookie
             if (!TextUtils.isEmpty(d.toString())) {
-                String oldCookie = SP.get("cookie", "");
+                String oldCookie = MMKVUtil.getInstance().decodeString("cookie");
                 HashMap<String, String> stringStringHashMap = new HashMap<>();
 
                 // 之前存过cookie
@@ -69,8 +66,7 @@ public class ReceivedCookiesInterceptor implements Interceptor {
                         stringBuilder.append(";");
                     }
                 }
-                SP.put("config", stringBuilder.toString());
-
+                MMKVUtil.getInstance().encode("config",stringBuilder.toString());
 //                    Log.e("jing", "------------处理后的 cookies:" + stringBuilder.toString());
             }
         }

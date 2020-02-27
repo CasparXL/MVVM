@@ -1,19 +1,14 @@
 package com.lxb.mvvmproject.network;
 
-
-
-import android.arch.lifecycle.LiveData;
-
-import com.lxb.mvvmproject.bean.Bean;
-import com.lxb.mvvmproject.bean.UserBean;
+import java.util.HashMap;
 
 import io.reactivex.Observable;
-import okhttp3.RequestBody;
 import retrofit2.http.Body;
+import retrofit2.http.FieldMap;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 /**
  * "浪小白" 创建 2019/7/1.
@@ -21,14 +16,8 @@ import retrofit2.http.Query;
  */
 
 public interface ApiService {
-    @Headers("Content-type:application/x-www-form-urlencoded;charset=UTF-8;")
-    @POST("/")
-    Observable<String> getStartData(@Body String s);
-    //用户协议
-    @GET("user/getUserAgreement")
-    Observable<Resource<String>> getUserAgreement();
-    //用户协议
-    @POST("user/loginUser")
-    Observable<Resource<UserBean>> loginUser(@Body RequestBody user);
+    @POST("xxxxxx")
+    Observable<String> getStartData(@QueryMap HashMap<String,Object> objectHashMap);
+
 
 }
